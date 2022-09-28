@@ -44,7 +44,7 @@ function displayHistory(){//function to display the search history
         }
     });
     for(let i of historylist){
-        $('#history').append($('<div>').attr("class","row").append($('<button>').text(i).attr('target',i).attr("class","btn btn-dark")));
+        $('#history').append($('<div>').attr("class","row").append($('<button>').text(i).attr('target',i).attr("class","btn btn-dark p-3 m-2")));
     }
 }
 
