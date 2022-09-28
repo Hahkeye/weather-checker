@@ -15,20 +15,23 @@
     <div class="site-wrapper">
         <body>
             <nav class="side-wrapper">      <!--  boot strapify this -->
-                <div class="search">
+                <form class="search" action="javascript:getWeather()">
+
                     <h2>Search for a City:</h2>
                     <input type="text" id="cityname" name="cityname" value="San Antonio">
                     <button type="submit">Search</button>
-                </div>
+                </form>
                 <div class="history"></div>
             </nav>
             <div class="main-warpper">
                 <div class="today-forecast">
-                    <p>Place and Date</p>
-                    <p>temp</p>
-                    <p>wind</p>
-                    <p>Humidity</p>
-    
+                    <h3 id="name">Place</h3>
+                    <p id="date">Date</p>
+                    <p id="current-temp">Tempature</p>
+                    <p id="feelsLike-temp">Tempature</p>
+                    <p id="max-temp">Tempature</p>
+                    <p id="min-temp">Tempature</p>
+                    <p id="wind">Wind</p>
                 </div>
                 <div class="fiveday-forecast">
                     <div class="fiveday rw">
