@@ -1,3 +1,7 @@
 .site-wrapper{
     display: flex;
 }
+.fiveday-forecast{
+    display: flex;
+    flex-direction: row;
+}
