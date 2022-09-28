@@ -17,17 +17,30 @@ class Day{
     }
 
     html() {
-        let cardDiv = $('<div>');
-        console.log(`http://openweathermap.org/img/wn/${this.icon}.png`);
-        cardDiv.append($('<p>').text(moment.unix(this.date).format("MM/DD/YY")));
-        cardDiv.append($('<img>').attr('src',`https://openweathermap.org/img/wn/${this.icon}.png`));//`https://openweathermap.org/img/wn/${day.icon}.png`
-        cardDiv.append($('<p>').text(`Current Tempature: ${this.currentTempature}°F`));
-        cardDiv.append($('<p>').text(`Feels Like: ${this.feelsLike}°F`));
-        cardDiv.append($('<p>').text(`Humidity: ${this.humidity}%`));
-        cardDiv.append($('<p>').text(`Maxium Tempature: ${this.maxTempature}°F`));
-        cardDiv.append($('<p>').text(`Minium Tempature: ${this.minTempature}°F`));
-        cardDiv.append($('<p>').text(`${this.windSpeed} MPH from ${this.windDirection}°`));
-        return cardDiv;
+        let diver = $('<div>').attr('class','col-md');
+        let cardDiv = $('<div>').attr('class','card');
+        cardDiv.append($('<img>').attr('src',`https://openweathermap.org/img/wn/${this.icon}.png`).attr('class','card-img-top'));//`https://openweathermap.org/img/wn/${day.icon}.png`
+        // cardDiv.append($('<div>').append());
+        let cardBody = $('<div>').attr('class','card-body');
+        cardBody.append($('<p>').text(moment.unix(this.date).format("MM/DD/YY")).attr('class','card-title'));
+        // cardDiv.append($('<p>').text(moment.unix(this.date).format("MM/DD/YY")).attr('class','card-title'));
+        let list = $('<ul>').attr('class','list-group list-group-flush');
+        list.append($('<li>').text(`Current Tempature: ${this.currentTempature}°F`).attr('class','list-group-item'));
+        list.append($('<li>').text(`Feels Like: ${this.feelsLike}°F`).attr('class','list-group-item'));
+        list.append($('<li>').text(`Humidity: ${this.humidity}%`).attr('class','list-group-item'));
+        list.append($('<li>').text(`Maxium Tempature: ${this.maxTempature}°F`).attr('class','list-group-item'));
+        list.append($('<li>').text(`Current Tempature: ${this.currentTempature}°F`).attr('class','list-group-item'));
+        list.append($('<li>').text(`${this.windSpeed} MPH from ${this.windDirection}°`).attr('class','list-group-item'));
+        // cardDiv.append($('<p>').text(`Current Tempature: ${this.currentTempature}°F`));
+        // cardDiv.append($('<p>').text(`Feels Like: ${this.feelsLike}°F`));
+        // cardDiv.append($('<p>').text(`Humidity: ${this.humidity}%`));
+        // cardDiv.append($('<p>').text(`Maxium Tempature: ${this.maxTempature}°F`));
+        // cardDiv.append($('<p>').text(`Minium Tempature: ${this.minTempature}°F`));
+        // cardDiv.append($('<p>').text(`${this.windSpeed} MPH from ${this.windDirection}°`));
+        cardDiv.append(cardBody);
+        cardDiv.append(list);
+        diver.append(cardDiv);
+        return diver;
     }
 }
 
@@ -40,7 +53,8 @@ function displayHistory(){
         }
     });
     for(let i of historylist){
-        $('#history').append($('<button>').text(i).attr('target',i).attr("class","btn btn-dark"));
+        $('#history').append($('<div>').attr("class","row").append($('<button>').text(i).attr('target',i).attr("class","btn btn-dark")));
+        // $('#history').append($('<button>').text(i).attr('target',i).attr("class","btn btn-dark"));
     }
 }
 
@@ -49,6 +63,7 @@ $(function(){
         historylist=JSON.parse(localStorage.getItem('history'));
         displayHistory();
     }
+    getWeather("Minneapolis");
 });
 
 function displayDay(day){
@@ -75,11 +90,11 @@ function display5Day(data,name){//every 8
     for(let x=3;x<data.length;x+=8){
         tempDays.push(new Day(data[x].main.temp_min,data[x].main.temp_max,data[x].main.temp,data[x].main.feels_like,data[x].dt,data[x].wind.speed,data[x].wind.deg,data[x].main.humidity,name,data[x].weather[0].icon));
     }
-    console.log(tempDays);
-    let body=$('.fiveday-forecast');
+    // console.log(tempDays);
+    let body=$('#fiveday-forecast');
     body.empty();
     for(let d of tempDays){
-        console.log(d)
+        // console.log(d)
         // let tempDiv = $('<div>');
         body.append(d.html());
     }
@@ -92,7 +107,7 @@ function get5Day(city){
     fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=f850e219e63b844872fab8992ab03f6c`).then(response =>{
         return response.json();
     }).then(data=>{
-        console.log(data);
+        // console.log(data);
         display5Day(data.list,city);
     }).catch(function(error){
         displayNF();
@@ -113,8 +128,8 @@ function getWeather(city){
             historylist.push(city.toLowerCase());
             localStorage.setItem("history",JSON.stringify(historylist));
         }
-        console.log(data);
-        console.log(tempD);
+        // console.log(data);
+        // console.log(tempD);
         displayHistory();
         displayDay(tempD);
     }).catch(function(error){

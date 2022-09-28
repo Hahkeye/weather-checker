@@ -12,39 +12,36 @@
     <header>
         <h1> Weather Dashboard </h1>
     </header>
-    <div class="site-wrapper">
+    <!-- <div class="d-table-row"> -->
         <body>
-            <nav class=".container">      <!--  boot strapify this -->
-                <form class="search" action="javascript:getWeather()">
-
-                    <h2>Search for a City:</h2>
-                    <input type="text" id="cityname" name="cityname" value="San Antonio">
-                    <button class="btn btn-secondary" type="submit">Search</button>
-                </form>
-                <div class=".container" id="history"></div>
-            </nav>
-            <div class="main-warpper">
-                <div class="card" id="today-forecast">
-                    <h3 id="name">Place</h3>
-                    <p id="date">Date</p>
-                    <img id="icon">
-                    <p id="humidity">Humidity</p>
-                    <p id="current-temp">Tempature</p>
-                    <p id="feelsLike-temp">Tempature</p>
-                    <p id="max-temp">Tempature</p>
-                    <p id="min-temp">Tempature</p>
-                    <p id="wind">Wind</p>
-                </div>
-                <h2>5-Day Forecast:</h2>
-                <div class="fiveday-forecast">
-                    <div class="fiveday rw">
-                        <div class="each individual day"></div>
+            <div class="container">
+                <nav class=".container-fluid">      <!--  boot strapify this -->
+                    <form class="search" action="javascript:getWeather()">
+                        <h2>Search for a City:</h2>
+                        <input type="text" id="cityname" name="cityname" value="San Antonio">
+                        <button class="btn btn-secondary" type="submit">Search</button>
+                    </form>
+                    <br>
+                    <div class="col-sm" id="history"></div>
+                </nav>
+                <div class="container">
+                    <div class="card" id="today-forecast">
+                        <h3 id="name">Place</h3>
+                        <p id="date">Date</p>
+                        <img id="icon">
+                        <p id="humidity">Humidity</p>
+                        <p id="current-temp">Tempature</p>
+                        <p id="feelsLike-temp">Tempature</p>
+                        <p id="max-temp">Tempature</p>
+                        <p id="min-temp">Tempature</p>
+                        <p id="wind">Wind</p>
                     </div>
+                    <h2>5-Day Forecast:</h2>
+                    <div id="fiveday-forecast" class="row"></div>
                 </div>
-    
             </div>
         </body>
-    </div>
+    <!-- </div> -->
  
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
