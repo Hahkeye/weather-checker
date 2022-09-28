@@ -2,7 +2,7 @@
 //https://api.openweathermap.org/data/2.5/weather?q=minneapolis&appid=f850e219e63b844872fab8992ab03f6c
 //(0K − 273.15) × 9/5 + 32 = -459.7°F
 var historylist=[];
-class Day{
+class Day{//Day class so one can more easily handle data freturn from api
     constructor(min,max,current,feels,date,windSpeed,windDirection,hum,name,icon){
         this.currentTempature=Math.floor(1.8*(current-273)+32);
         this.feelsLike=Math.floor(1.8*(feels-273)+32);
@@ -16,14 +16,12 @@ class Day{
         this.icon=icon
     }
 
-    html() {
+    html() {//generates thehtml to display a day on the wepage with its weather and date
         let diver = $('<div>').attr('class','col-md');
         let cardDiv = $('<div>').attr('class','card');
         cardDiv.append($('<img>').attr('src',`https://openweathermap.org/img/wn/${this.icon}.png`).attr('class','card-img-top'));//`https://openweathermap.org/img/wn/${day.icon}.png`
-        // cardDiv.append($('<div>').append());
         let cardBody = $('<div>').attr('class','card-body');
         cardBody.append($('<p>').text(moment.unix(this.date).format("MM/DD/YY")).attr('class','card-title'));
-        // cardDiv.append($('<p>').text(moment.unix(this.date).format("MM/DD/YY")).attr('class','card-title'));
         let list = $('<ul>').attr('class','list-group list-group-flush');
         list.append($('<li>').text(`Current Tempature: ${this.currentTempature}°F`).attr('class','list-group-item'));
         list.append($('<li>').text(`Feels Like: ${this.feelsLike}°F`).attr('class','list-group-item'));
@@ -31,12 +29,6 @@ class Day{
         list.append($('<li>').text(`Maxium Tempature: ${this.maxTempature}°F`).attr('class','list-group-item'));
         list.append($('<li>').text(`Current Tempature: ${this.currentTempature}°F`).attr('class','list-group-item'));
         list.append($('<li>').text(`${this.windSpeed} MPH from ${this.windDirection}°`).attr('class','list-group-item'));
-        // cardDiv.append($('<p>').text(`Current Tempature: ${this.currentTempature}°F`));
-        // cardDiv.append($('<p>').text(`Feels Like: ${this.feelsLike}°F`));
-        // cardDiv.append($('<p>').text(`Humidity: ${this.humidity}%`));
-        // cardDiv.append($('<p>').text(`Maxium Tempature: ${this.maxTempature}°F`));
-        // cardDiv.append($('<p>').text(`Minium Tempature: ${this.minTempature}°F`));
-        // cardDiv.append($('<p>').text(`${this.windSpeed} MPH from ${this.windDirection}°`));
         cardDiv.append(cardBody);
         cardDiv.append(list);
         diver.append(cardDiv);
@@ -44,21 +36,19 @@ class Day{
     }
 }
 
-function displayHistory(){
+function displayHistory(){//function to display the search history
     $('#history').empty();
     $('#history').on('click',function(event){
         if(event.target.nodeName == "BUTTON"){
-            // console.log("Target, "+$(event.target).attr('target'));
             getWeather($(event.target).attr('target'));
         }
     });
     for(let i of historylist){
         $('#history').append($('<div>').attr("class","row").append($('<button>').text(i).attr('target',i).attr("class","btn btn-dark")));
-        // $('#history').append($('<button>').text(i).attr('target',i).attr("class","btn btn-dark"));
     }
 }
 
-$(function(){
+$(function(){//On page load get history and display it.
     if(localStorage.getItem('history')){
         historylist=JSON.parse(localStorage.getItem('history'));
         displayHistory();
@@ -66,7 +56,7 @@ $(function(){
     getWeather("Minneapolis");
 });
 
-function displayDay(day){
+function displayDay(day){//kinda rudundate but I kept it.Displys a single day compared to 5
     // console.log(`https://openweathermap.org/img/wn/${day.icon}.png`);
     let today = $('#today-forecast');
     today.children($('#name').text(day.name));
@@ -80,27 +70,27 @@ function displayDay(day){
     today.children('#wind').text(`${day.windSpeed} MPH from ${day.windDirection}°`);
     get5Day(day.name);
 }
-function displayNF(){
+function displayNF(){//If no city is found display nothing found and clear the 5 day
     let today = $('#today-forecast');
     today.children('#name').text("City Not Found");
+    let body=$('#fiveday-forecast');
+    body.empty();
+
 }
 
-function display5Day(data,name){//every 8
+function display5Day(data,name){//Kind of hacky way to get 5 day weather. Take noon from every days worth of weather and display it. Averages where kinda lame and didnt show much.
     let tempDays = [];
-    for(let x=3;x<data.length;x+=8){
+    for(let x=3;x<data.length;x+=8){//for loop to get mid day every day
         tempDays.push(new Day(data[x].main.temp_min,data[x].main.temp_max,data[x].main.temp,data[x].main.feels_like,data[x].dt,data[x].wind.speed,data[x].wind.deg,data[x].main.humidity,name,data[x].weather[0].icon));
     }
-    // console.log(tempDays);
     let body=$('#fiveday-forecast');
     body.empty();
     for(let d of tempDays){
-        // console.log(d)
-        // let tempDiv = $('<div>');
         body.append(d.html());
     }
 }
 
-function get5Day(city){
+function get5Day(city){//different api call for the 5 day forecast so this handles that. if it erros out catch it and display
     if(!city){
         city=$('#cityname').val();
     }
@@ -113,10 +103,9 @@ function get5Day(city){
         displayNF();
         console.log("Erorr in the api request 2",error);
     });
-    // });
 }
 
-function getWeather(city){
+function getWeather(city){//single day api call if it errors out catch and display
     if(!city){
         city=$('#cityname').val();
     }
@@ -128,8 +117,6 @@ function getWeather(city){
             historylist.push(city.toLowerCase());
             localStorage.setItem("history",JSON.stringify(historylist));
         }
-        // console.log(data);
-        // console.log(tempD);
         displayHistory();
         displayDay(tempD);
     }).catch(function(error){
@@ -137,7 +124,3 @@ function getWeather(city){
         console.log("Erorr in the api request 1",error);
     });
 }
-
-//Group 1
-
-// console.log(test1);
